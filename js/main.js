@@ -1,3 +1,4 @@
-var app = new Vue({
-	el: '#app'
-})
+import Vue from 'vue'
+import Vuetify from 'vuetify'
+
+Vue.use(Vuetify)

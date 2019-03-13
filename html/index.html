@@ -1,116 +1,113 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
-	<meta charset="utf-8">
-	<title>Vue.js App</title>
-	<link rel="stylesheet" href="../css/main.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
+  <link href="../node_modules/vuetify/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 </head>
 <body>
-	<div id="app-2">
-		<span v-bind:title="message">
-    		Hover your mouse over me for a few seconds
-    		to see my dynamically bound title!
-  		</span>
-	</div>
+  <div id="app">
+  <v-app id="inspire">
+    <v-container grid-list-xl>
+      <v-layout
+        wrap
+        justify-space-between
+      >
+        <v-flex
+          xs12
+          md4
+        >
+          <v-form ref="form">
+            <v-text-field
+              v-model="model"
+              :counter="max"
+              :rules="rules"
+              label="First name"
+            ></v-text-field>
+          </v-form>
+        </v-flex>
+  
+        <v-flex
+          xs12
+          md6
+        >
+          <v-slider
+            v-model="max"
+            label="Max characters"
+          >
+          </v-slider>
+  
+          <v-checkbox
+            v-model="allowSpaces"
+            label="Allow spaces"
+          ></v-checkbox>
+  
+          <v-text-field
+            v-model="match"
+            label="Value must match"
+          ></v-text-field>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-app>
+</div>
 
-	<div id="app-3">
-	  	<span v-if="seen">Now you see me</span>
-	</div>
+  <script src="../js/vue.min.js"></script>
+  <script src="../node_modules/vuetify/dist/vuetify.min.js"></script>
+  <script>
+    new Vue({
+	  el: '#app',
+	  data: () => ({
+	    allowSpaces: false,
+	    match: 'Foobar',
+	    max: 0,
+	    model: 'Foobar'
+	  }),
 
-	<div id="app-4">
-		<ol>
-    		<li v-for="todo in todos">
-      			{{ todo.text }}
-    		</li>
-  		</ol>
-	</div>
+	  computed: {
+	    rules () {
+	      const rules = []
 
-	<div id="app-5">
-		<p>{{ message }}</p>
-		<button v-on:click="reverseMessage">Reverse Message</button>
-	</div>
+	      if (this.max) {
+	        const rule =
+	          v => (v || '').length <= this.max ||
+	            `A maximum of ${this.max} characters is allowed`
 
-	<div id="app-6">
-		<p>{{ message }}</p>
-		<input v-model="message">
-	</div>
+	        rules.push(rule)
+	      }
 
-	<div id="app-7">
-		<ol>
-		    <!-- 
-		      各 todo-item の内容を表す todo オブジェクトを与えます。
-		      これにより内容は動的に変化します。
-		      また後述する "key" を各コンポーネントに提供する必要があります。
-		    -->
-		    <todo-item
-		      v-for="item in groceryList"
-		      v-bind:todo="item"
-		      v-bind:key="item.id"
-		    ></todo-item>
-	  	</ol>
-	</div>
+	      if (!this.allowSpaces) {
+	        const rule =
+	          v => (v || '').indexOf(' ') < 0 ||
+	            'No spaces are allowed'
 
-	<script src="../js/vue.js"></script>
-	<script>
-		var app2 = new Vue({
-			el: '#app-2',
-			data: {
-		 		message: 'You loaded this page on ' + new Date().toLocaleString()
-			}
-		})
+	        rules.push(rule)
+	      }
 
-		var app3 = new Vue({
-			el: '#app-3',
-			data: {
-				seen: true
-			}
-		})
+	      if (this.match) {
+	        const rule =
+	          v => (!!v && v) === this.match ||
+	            'Values do not match'
 
-		var app4 = new Vue({
- 			el: '#app-4',
-			data: {
-				todos: [
-					{ text: 'Learn JavaScript' },
- 					{ text: 'Learn Vue' },
-					{ text: 'Build something awesome' }
-    			]
-  			}
-		})
+	        rules.push(rule)
+	      }
 
-		var app5 = new Vue({
-			el: '#app-5',
-			data: {
-				message: 'Hello Vue.js!'
-			},
-			methods: {
-				reverseMessage: function () {
-					this.message = this.message.split('').reverse().join('')
-				}
-			}
-		})
+	      return rules
+	    }
+	  },
 
-		var app6 = new Vue({
-			el: '#app-6',
-			data: {
-				message: 'Hello Vue!'
-			}
-		})
+	  watch: {
+	    match: 'validateField',
+	    max: 'validateField',
+	    model: 'validateField'
+	  },
 
-		Vue.component('todo-item', {
-			props: ['todo'],
-			template: '<li>{{ todo.text }}</li>'
-		})
-
-		var app7 = new Vue({
-			el: '#app-7',
-  			data: {
-    			groceryList: [
-      				{ id: 0, text: 'Vegetables' },
-      				{ id: 1, text: 'Cheese' },
-      				{ id: 2, text: 'Whatever else humans are supposed to eat' }
-    			]
-		  	}
-		})
-	</script>
+	  methods: {
+	    validateField () {
+	      this.$refs.form.validate()
+	    }
+	  }
+	})
+  </script>
 </body>
 </html>

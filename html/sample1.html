@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>Vue.js App</title>
+
+  <script src="../js/vue.js"></script>
+  <link rel="stylesheet" type="text/css" href="../css/sample1.css">
+</head>
+<body>
+  <!-- p38 -->
+  <div id="app1_1">
+    <p>{{message}}</p>
+  </div>
+
+  <!-- p39 -->
+  <div id="app1_2">
+    <ol>
+      <li v-for="item in list">{{item}}</li>
+    </ol>
+  </div>
+
+  <!-- p40 -->
+  <div id="app1_3">
+    <button v-on:click="handleClick">Click</button>
+  </div>
+
+  <!-- p40 -->
+  <div id="app1_4">
+    <p>{{message}}</p>
+    <input v-model="message">
+  </div>
+
+  <!-- p41 -->
+  <div id="app1_5">
+    <p v-if="show">Hello Vue.js!</p>
+  </div>
+
+  <!-- p42 -->
+  <div id="app1_6">
+    <button v-on:click="show=!show">切り替え</button>
+    <transition>
+      <p v-if="show">Hello Vue.js!</p>
+    </transition>
+  </div>
+
+  <script src="../js/sample1.js"></script>
+</body>
+</html>
